@@ -1,4 +1,4 @@
-const url = 'http://192.168.0.111:8080';
+const url = 'http://localhost:8080';
 const loginUrl = url+"/comm/chat/login";
 const fetchAllUsersUrl = url + "/comm/fetchAllUsers";
 
@@ -24,7 +24,8 @@ function connectToChat(userName) {
             }
         });
          stompClient.subscribe("/users", function (response) {
-                    let data = JSON.parse(response.body);
+                    // we can show who is online here
+                     console.log(response);
                      fetchAll();
                 });
     });
@@ -53,15 +54,16 @@ function chatlogin(){
                   x.overrideMimeType("application/json;charset=UTF-8");
                 }
               },
-              success: function() {
+              success: function(response) {
                     usernamePage.classList.add('hidden');
                     chatPage.classList.remove('hidden');
                     $('#loggedusername').html(userName);
+                    console.log("Response " + response);
                     connectToChat(userName);
                     fetchAll();
               },
               error: function (request, status, error) {
-                  alert("Error occurred");
+                  alert("Error occurred -" + request.responseText);
                     },
               complete: function () {
 
