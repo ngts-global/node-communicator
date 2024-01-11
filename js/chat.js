@@ -19,6 +19,7 @@ function connectToChat(userName) {
         console.log("connected to: " + frame);
         stompClient.subscribe("/topic/messages/" + userName, function (response) {
             let data = JSON.parse(response.body);
+            receiveMessage(data);
             if (selectedUser === data.fromLogin) {
                 render(data.message, data.fromLogin);
             } else {
@@ -34,9 +35,6 @@ function connectToChat(userName) {
     });
 }
 
-function updateChatHistory(){
-
-}
 
 function sendMsg() {
     //let loggedInUserName = document.getElementById("email").value;
@@ -45,6 +43,56 @@ function sendMsg() {
         fromLogin: loggedInUserUUID,
         message: typedMsg
     }));
+}
+
+function receiveMessage(receivedMsg){
+    var from = receivedMsg.fromLogin;
+    var recMsg = receivedMsg.message;
+
+    const chatMessages = document.getElementById('idchatmessages');
+
+    if (recMsg.trim() !== '') {
+        const message = document.createElement('message-user-right');
+        message.innerHTML = `<div class="message-user-right">
+            <div class="message-user-right-img">
+                <img src="/imgs/chat-user.jpeg" alt="">
+                <p class="mt-0 mb-0"><strong>Maria Dennis</strong></p>
+                <small>mié 17:59</small>
+            </div>
+            <div class="message-user-right-text">
+                <strong>${recMsg}</strong>
+            </div>
+        </div>`;
+        
+        chatMessages.appendChild(message);
+        document.getElementById("idchattxt").value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the bottom
+    }
+}
+
+function sendMessage() {
+    const messageInput = document.getElementById("idchattxt").value;
+    const chatMessages = document.getElementById('idchatmessages');
+
+    sendMsg();
+
+    if (messageInput.trim() !== '') {
+        const message = document.createElement('message-user-left');
+        message.innerHTML = `<div class="message-user-left">
+            <div class="message-user-left-img">
+                <img src="/imgs/chat-user.jpeg" alt="">
+                <p class="mt-0 mb-0"><strong>Maria Dennis</strong></p>
+                <small>mié 17:59</small>
+            </div>
+            <div class="message-user-left-text">
+                <strong>${messageInput}</strong>
+            </div>
+        </div>`;
+        
+        chatMessages.appendChild(message);
+        document.getElementById("idchattxt").value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the bottom
+    }
 }
 
 function chatlogin(){
@@ -110,6 +158,8 @@ function highlightselectedUser(selectedUser){
                      userChat.classList.remove('active');
                 }
             });
+
+
 }
 
 function updateChatWithUserDetails(selectedUser){
