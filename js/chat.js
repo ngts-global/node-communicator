@@ -73,16 +73,16 @@ function receiveMessage(receivedMsg){
 function sendMessage() {
     const messageInput = document.getElementById("idchattxt").value;
     const chatMessages = document.getElementById('idchatmessages');
-
-    sendMsg();
+    let displayname = document.getElementById("displayname").value
+    sendMsg(); // Sending msg to server
 
     if (messageInput.trim() !== '') {
         const message = document.createElement('message-user-left');
         message.innerHTML = `<div class="message-user-left">
             <div class="message-user-left-img">
                 <img src="/imgs/chat-user.jpeg" alt="">
-                <p class="mt-0 mb-0"><strong>Maria Dennis</strong></p>
-                <small>mié 17:59</small>
+                <p class="mt-0 mb-0"><strong>'${displayname}'</strong></p>
+                <small>${getCurrentTime()}</small>
             </div>
             <div class="message-user-left-text">
                 <strong>${messageInput}</strong>
